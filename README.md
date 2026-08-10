@@ -30,7 +30,7 @@ For **local development** (optional):
 - 🔗 Deep-link to any date via `?day=YYYY-MM-DD` (or `MM-DD-YYYY`)
 - 🍗 Auto-matched food emojis (chicken, corn dog, cheese, milk, fruit, …)
 - 🎉 Playful tap effects and a confetti cannon, kid-tested silliness
-- 🎨 Seven switchable background themes (cloudy sky · outer space · balloon party · under the sea · sunny meadow · dino world · candy/food) via a starburst "Change Theme" sticker in the top-left corner
+- 🎨 Eight switchable background themes (cloudy sky · outer space · balloon party · under the sea · sunny meadow · dino world · rainbow unicorn · candy/food) via a starburst "Change Theme" sticker in the top-left corner
 - 📅 "Last updated" badge, friendly weekend / no-school fallback
 - 🪶 100% static front-end — vanilla HTML/CSS/JS, **no build step, no external CDNs**
 - ♿ Responsive (phone → wall tablet) and honors `prefers-reduced-motion`
@@ -61,8 +61,8 @@ saved and restored on your next visit (until you change it again).
   <tr>
     <td align="center"><img src="screenshots/theme-meadow.png" width="150" alt="Sunny Meadow theme"><br><b>Sunny Meadow</b></td>
     <td align="center"><img src="screenshots/theme-dino.png" width="150" alt="Dino World theme"><br><b>Dino World</b></td>
+    <td align="center"><img src="screenshots/theme-rainbow.png" width="150" alt="Rainbow Unicorn theme"><br><b>Rainbow Unicorn</b></td>
     <td align="center"><img src="screenshots/theme-candy.png" width="150" alt="Candy Fun theme"><br><b>Candy Fun</b><br><sub>original</sub></td>
-    <td></td>
   </tr>
 </table>
 
@@ -129,7 +129,8 @@ in cycle order: an **outer space** starfield with a moon, planet, rocket & rando
 shooting stars, a **balloon party** with rising balloons & confetti, an **under the
 sea** scene with rising bubbles & drifting fish, a **sunny meadow** with falling
 petals, a flower-dotted grass line & fluttering butterflies, a **dino world** with
-rolling hills, ferns, a volcano & roaming dinosaurs, and finally the original
+rolling hills, ferns, a volcano & roaming dinosaurs, a **rainbow unicorn** with a
+pastel-rainbow sky, floating unicorn & drifting sparkles, and finally the original
 **candy/food** theme with floating snacks. Adding a new theme is two small steps:
 
 1. In `styles.css`, add a `[data-theme="your-id"]` block: set the `body`

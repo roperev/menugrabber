@@ -278,6 +278,7 @@
     { id: "sea",   label: "Under the Sea", color: "#1f8fcf" },
     { id: "meadow", label: "Sunny Meadow", color: "#a6e4ff" },
     { id: "dino",  label: "Dino World",   color: "#ffe1a8" },
+    { id: "rainbow", label: "Rainbow Unicorn", color: "#ffbcdd" },
     { id: "candy", label: "Candy Fun",   color: "#ff8a5c" }   // <- original theme, now last
   ];
 

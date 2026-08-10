@@ -356,6 +356,42 @@ body {
   50%      { transform: translateY(-8px) rotate(1deg); }
 }
 
+/* ---- theme: "rainbow" — pastel rainbow sky with a unicorn & drifting sparkles ---- */
+[data-theme="rainbow"] body {
+  background: linear-gradient(180deg, #ffbcdd 0%, #ffe0c2 20%, #fff6c0 40%, #d6f5cf 58%, #c6ecff 78%, #e3d4ff 100%);
+}
+/* two sparkle layers gently rising */
+[data-theme="rainbow"] .sky::before,
+[data-theme="rainbow"] .sky::after {
+  background-repeat: repeat;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><g><circle cx='30' cy='40' r='3' fill='white'/><circle cx='90' cy='20' r='2.4' fill='%23ffd6f5'/><circle cx='150' cy='60' r='3.2' fill='%23fff3b0'/><circle cx='210' cy='30' r='2.2' fill='%23d6c8ff'/><circle cx='60' cy='120' r='2.8' fill='white'/><circle cx='130' cy='150' r='2.4' fill='%23c8f0ff'/><circle cx='200' cy='130' r='3' fill='%23ffd6f5'/><circle cx='40' cy='200' r='2.4' fill='%23fff3b0'/><circle cx='110' cy='210' r='3' fill='white'/><circle cx='180' cy='200' r='2.6' fill='%23d6ffd9'/><circle cx='75' cy='75' r='2' fill='%23ffd6f5'/><circle cx='165' cy='105' r='2.2' fill='white'/></g></svg>");
+}
+[data-theme="rainbow"] .sky::before {
+  background-size: 240px 240px;
+  opacity: 0.9;
+  animation: sparkleRiseA 34s linear infinite;
+}
+[data-theme="rainbow"] .sky::after {
+  background-size: 150px 150px;
+  opacity: 0.7;
+  animation: sparkleRiseB 22s linear infinite;
+}
+@keyframes sparkleRiseA { from { background-position: 0 0; } to { background-position: 0 -240px; } }
+@keyframes sparkleRiseB { from { background-position: 0 0; } to { background-position: 0 -150px; } }
+[data-theme="rainbow"] .decor {
+  display: block;
+  position: absolute;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.12));
+}
+[data-theme="rainbow"] .d1 { top: 9%; right: 7%; font-size: clamp(3rem, 10vw, 5.5rem); animation: floatY 6s ease-in-out infinite;      }
+[data-theme="rainbow"] .d2 { bottom: 10%; left: 9%; font-size: clamp(2.6rem, 9vw, 4.6rem); animation: floatY 8s ease-in-out infinite 0.5s; }
+[data-theme="rainbow"] .d3 { top: 40%; left: 6%; font-size: clamp(2rem, 6vw, 3.2rem); animation: floatY 5s ease-in-out infinite 1s;   }
+[data-theme="rainbow"] .d4 { bottom: 32%; right: 9%; font-size: clamp(2rem, 6vw, 3.4rem); animation: floatY 6.5s ease-in-out infinite 0.3s; }
+[data-theme="rainbow"] .d1::before { content: "🦄"; }
+[data-theme="rainbow"] .d2::before { content: "🌈"; }
+[data-theme="rainbow"] .d3::before { content: "⭐"; }
+[data-theme="rainbow"] .d4::before { content: "💖"; }
+
 /* ---- theme switch button: a silly angled starburst "sticker" (top-left) ---- */
 .theme-btn {
   --burst: polygon(50.0% 0.0%, 58.2% 13.9%, 71.7% 5.0%, 73.1% 21.1%, 89.1% 18.8%, 83.3% 33.9%, 98.7% 38.9%, 87.0% 50.0%, 98.7% 61.1%, 83.3% 66.1%, 89.1% 81.2%, 73.1% 78.9%, 71.7% 95.0%, 58.2% 86.1%, 50.0% 100.0%, 41.8% 86.1%, 28.3% 95.0%, 26.9% 78.9%, 10.9% 81.2%, 16.7% 66.1%, 1.3% 61.1%, 13.0% 50.0%, 1.3% 38.9%, 16.7% 33.9%, 10.9% 18.8%, 26.9% 21.1%, 28.3% 5.0%, 41.8% 13.9%);
