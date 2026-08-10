@@ -267,6 +267,80 @@
     if (nowSelected) confettiCannon();       // big corner poppers only when selecting
   }
 
+  // ---------- theme switcher ----------
+  // To add a theme: add a { id, label } here and a matching
+  // [data-theme="id"] block in styles.css.
+  // THEMES[0] is the default for first-time visitors (no saved choice).
+  var THEMES = [
+    { id: "sky",   label: "Cloudy Sky",  color: "#5eb3f0" },  // <- default
+    { id: "candy", label: "Candy Fun",   color: "#ff8a5c" },
+    { id: "space", label: "Outer Space", color: "#241a55" },
+    { id: "balloon", label: "Balloon Party", color: "#8fd3f5" },
+    { id: "sea",   label: "Under the Sea", color: "#1f8fcf" },
+    { id: "meadow", label: "Sunny Meadow", color: "#a6e4ff" },
+    { id: "dino",  label: "Dino World",   color: "#ffe1a8" }
+  ];
+
+  function themeById(id) {
+    for (var i = 0; i < THEMES.length; i++) { if (THEMES[i].id === id) return THEMES[i]; }
+    return THEMES[0];
+  }
+
+  function applyTheme(id) {
+    var t = themeById(id);
+    document.documentElement.setAttribute("data-theme", t.id);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", t.color);
+    // Button keeps a static "Try a New Theme" label (set in HTML).
+  }
+
+  function setupThemes() {
+    var saved = null;
+    try { saved = localStorage.getItem("mg-theme"); } catch (e) {}
+    applyTheme(saved || THEMES[0].id);
+    var btn = document.getElementById("themeBtn");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var cur = document.documentElement.getAttribute("data-theme");
+      var idx = 0;
+      for (var i = 0; i < THEMES.length; i++) { if (THEMES[i].id === cur) { idx = i; break; } }
+      var next = THEMES[(idx + 1) % THEMES.length].id;
+      applyTheme(next);
+      try { localStorage.setItem("mg-theme", next); } catch (e) {}
+    });
+  }
+
+  // A CSS-drawn shooting star for the space theme: each one gets a random
+  // start point, direction, length and speed. Runs on a self-scheduling timer.
+  function spawnShootingStar() {
+    var isSpace = document.documentElement.getAttribute("data-theme") === "space";
+    if (isSpace && !prefersReducedMotion) {
+      var sky = document.querySelector(".sky");
+      if (sky) {
+        var W = window.innerWidth, H = window.innerHeight;
+        var startX = rand(0.08 * W, 0.92 * W);
+        var startY = rand(-0.15 * H, 0.2 * H);
+        var dir = Math.random() < 0.5 ? -1 : 1;         // streak left or right
+        var dx = dir * rand(0.3, 0.7) * W;
+        var dy = rand(0.45, 0.9) * H;                    // always heading down
+        var angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        var star = document.createElement("div");
+        star.className = "shooting-star";
+        star.style.width = Math.round(rand(80, 160)) + "px";
+        sky.appendChild(star);
+        var anim = star.animate([
+          { transform: "translate(" + startX + "px," + startY + "px) rotate(" + angle + "deg)", opacity: 0 },
+          { opacity: 1, offset: 0.12 },
+          { opacity: 1, offset: 0.82 },
+          { transform: "translate(" + (startX + dx) + "px," + (startY + dy) + "px) rotate(" + angle + "deg)", opacity: 0 }
+        ], { duration: rand(650, 1500), easing: "ease-in" });
+        anim.onfinish = (function (node) { return function () { node.remove(); }; })(star);
+      }
+    }
+    // reschedule: frequent-ish while in space, a lazy poll otherwise
+    setTimeout(spawnShootingStar, isSpace ? rand(2200, 6000) : 1500);
+  }
+
   function setupInteractions() {
     var menu = document.getElementById("menu");
     menu.addEventListener("click", function (e) {
@@ -524,7 +598,9 @@
     document.getElementById("nextBtn").addEventListener("click", function () { step(1); });
     document.getElementById("todayBtn").addEventListener("click", goToday);
     document.getElementById("tomorrowBtn").addEventListener("click", goTomorrow);
+    setupThemes();
     setupInteractions();
+    setTimeout(spawnShootingStar, 1200);   // start the space-theme shooting stars
     document.addEventListener("keydown", function (e) {
       if (e.key === "ArrowLeft") step(-1);
       else if (e.key === "ArrowRight") step(1);

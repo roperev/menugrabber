@@ -30,6 +30,7 @@ For **local development** (optional):
 - 🔗 Deep-link to any date via `?day=YYYY-MM-DD` (or `MM-DD-YYYY`)
 - 🍗 Auto-matched food emojis (chicken, corn dog, cheese, milk, fruit, …)
 - 🎉 Playful tap effects and a confetti cannon, kid-tested silliness
+- 🎨 Seven switchable background themes (cloudy sky · candy/food · outer space · balloon party · under the sea · sunny meadow · dino world) via a starburst "Change Theme" sticker in the top-left corner
 - 📅 "Last updated" badge, friendly weekend / no-school fallback
 - 🪶 100% static front-end — vanilla HTML/CSS/JS, **no build step, no external CDNs**
 - ♿ Responsive (phone → wall tablet) and honors `prefers-reduced-motion`
@@ -97,6 +98,24 @@ http://rprnt.com/menugrabber/?day=08-19-2026     # MM-DD-YYYY
 An invalid or missing value simply opens on today. If the requested day is outside
 the 21-day scraped window it still displays (with a friendly "no lunch" card), and
 the nav buttons let you browse around it.
+
+### Themes
+The **🎨 Try a New Theme** starburst sticker in the top-left corner cycles the
+background theme and remembers your choice in `localStorage`. First-time visitors
+see the default, an animated flat-bottomed **cloudy sky** (`THEMES[0]`). The others:
+a **candy/food** theme, an **outer space** starfield with a moon, planet, rocket &
+randomized shooting stars, a **balloon party** with rising balloons & confetti, an
+**under the sea** scene with rising bubbles & drifting fish, a **sunny meadow** with
+falling petals, a flower-dotted grass line & fluttering butterflies, and a **dino
+world** with rolling hills, ferns, a volcano & roaming dinosaurs. Adding a new theme
+is two small steps:
+
+1. In `web/styles.css`, add a `[data-theme="your-id"]` block: set the `body`
+   background, optionally reuse the two `.sky` layers (`::before`/`::after`) for a
+   repeating/animated pattern, and fill the four `.decor` slots via
+   `[data-theme="your-id"] .dN::before { content: "🙂"; }` (see `candy`/`space`).
+2. In `web/app.js`, add `{ id: "your-id", label: "Your Label", color: "#hex" }` to
+   the `THEMES` array (the `color` sets the mobile browser chrome via `theme-color`).
 
 ## Deploy (you copy files to the server manually)
 

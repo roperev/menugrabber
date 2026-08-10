@@ -32,30 +32,378 @@ html, body {
 body {
   font-family: var(--font);
   color: var(--ink);
-  background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+  /* cloudy-sky: deeper blue up top fading to pale near the horizon */
+  background: linear-gradient(180deg, #4aa6ee 0%, #7ec5f2 45%, #cfeafe 100%);
   background-attachment: fixed;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
 }
 
-/* ---- floating food in the background ---- */
+/* ---- animated cloudy-sky background ----
+   Two parallax layers of soft white clouds (inline SVG, blurred) drift
+   sideways at different speeds. Pure CSS, no external assets. */
 .sky { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-.cloud {
+.sky::before, .sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  /* Flat-bottomed "Toy Story"-style clouds: puffy rounded tops sitting on a
+     flat base. Each circle's lowest point is at (or above) the rect's flat
+     bottom edge, so the silhouette stays flat along the bottom. */
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='460' height='360'><defs><filter id='b'><feGaussianBlur stdDeviation='2.5'/></filter></defs><g fill='white' filter='url(%23b)'><rect x='70' y='114' width='190' height='36' rx='16'/><circle cx='110' cy='112' r='38'/><circle cx='160' cy='90' r='56'/><circle cx='215' cy='110' r='40'/><circle cx='250' cy='120' r='30'/><circle cx='92' cy='124' r='26'/><rect x='255' y='266' width='170' height='34' rx='15'/><circle cx='295' cy='262' r='38'/><circle cx='340' cy='240' r='50'/><circle cx='390' cy='264' r='36'/><circle cx='300' cy='252' r='28'/><circle cx='415' cy='272' r='26'/></g></svg>");
+}
+/* far layer: smaller, fainter, slower */
+.sky::before {
+  background-size: 340px auto;
+  background-position: 0 18%;
+  opacity: 0.55;
+  animation: cloudDriftFar 95s linear infinite;
+}
+/* near layer: bigger, brighter, faster */
+.sky::after {
+  background-size: 620px auto;
+  background-position: 0 74%;
+  opacity: 0.92;
+  animation: cloudDriftNear 55s linear infinite;
+}
+@keyframes cloudDriftFar  { from { background-position-x: 0; } to { background-position-x: -340px; } }
+@keyframes cloudDriftNear { from { background-position-x: 0; } to { background-position-x: -620px; } }
+
+/* ============================================================
+   THEMES — switched by data-theme on <html> (see app.js THEMES).
+   The default (no attribute) is the "sky" theme defined above.
+   To add a theme: add a [data-theme="id"] block here + an entry
+   in the THEMES array in app.js.
+   ============================================================ */
+
+/* Background decor is hidden unless a theme opts in. Each .decor slot's emoji
+   is set per-theme via ::before content, so themes are fully CSS-driven. */
+.decor { display: none; }
+
+/* ---- theme: "candy" — warm gradient + floating food (the original look) ---- */
+[data-theme="candy"] body {
+  background: linear-gradient(160deg, #ffd36e 0%, #ff8a5c 55%, #ff6f91 100%);
+}
+[data-theme="candy"] .sky::before,
+[data-theme="candy"] .sky::after { display: none; }   /* no clouds in this theme */
+[data-theme="candy"] .decor {
+  display: block;
   position: absolute;
   font-size: clamp(2.8rem, 8.5vw, 5.5rem);
   opacity: 0.5;
   filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.12));
   animation: bob 7s ease-in-out infinite;
 }
-.cloud-1 { top: 12%; left: 8%;  animation-delay: 0s;   }
-.cloud-2 { top: 24%; right: 10%; animation-delay: 1.2s; }
-.cloud-3 { bottom: 18%; left: 12%; animation-delay: 2.1s; }
-.cloud-4 { bottom: 12%; right: 8%; animation-delay: 0.6s; }
+[data-theme="candy"] .d1 { top: 12%; left: 8%;   animation-delay: 0s;   }
+[data-theme="candy"] .d2 { top: 24%; right: 10%; animation-delay: 1.2s; }
+[data-theme="candy"] .d3 { bottom: 18%; left: 12%; animation-delay: 2.1s; }
+[data-theme="candy"] .d4 { bottom: 12%; right: 8%; animation-delay: 0.6s; }
+[data-theme="candy"] .d1::before { content: "🍎"; }
+[data-theme="candy"] .d2::before { content: "🥕"; }
+[data-theme="candy"] .d3::before { content: "🥛"; }
+[data-theme="candy"] .d4::before { content: "🍪"; }
 @keyframes bob {
   0%, 100% { transform: translateY(0) rotate(-6deg); }
   50%      { transform: translateY(-22px) rotate(6deg); }
 }
+
+/* ---- theme: "space" — starry night + moon, planet, rocket & shooting star ---- */
+[data-theme="space"] body {
+  background: linear-gradient(180deg, #0a1030 0%, #241a55 55%, #3d1e6b 100%);
+}
+/* reuse the two .sky layers as twinkling starfields */
+[data-theme="space"] .sky::before,
+[data-theme="space"] .sky::after {
+  background-repeat: repeat;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><g fill='white'><circle cx='20' cy='40' r='1.6' opacity='.9'/><circle cx='70' cy='120' r='1.1' opacity='.6'/><circle cx='130' cy='30' r='2' opacity='1'/><circle cx='190' cy='90' r='1.3' opacity='.7'/><circle cx='250' cy='50' r='1.6' opacity='.85'/><circle cx='280' cy='150' r='1' opacity='.5'/><circle cx='40' cy='200' r='1.8' opacity='.9'/><circle cx='110' cy='230' r='1.1' opacity='.6'/><circle cx='170' cy='180' r='1.4' opacity='.75'/><circle cx='230' cy='210' r='1.7' opacity='.9'/><circle cx='90' cy='70' r='1' opacity='.5'/><circle cx='150' cy='130' r='1.2' opacity='.65'/><circle cx='260' cy='270' r='1.5' opacity='.8'/><circle cx='30' cy='280' r='1.1' opacity='.6'/><circle cx='200' cy='260' r='1' opacity='.5'/><circle cx='120' cy='290' r='1.3' opacity='.7'/></g></svg>");
+}
+[data-theme="space"] .sky::before {
+  background-size: 300px 300px;
+  background-position: 0 0;
+  opacity: 1;
+  animation: twinkleA 4s ease-in-out infinite;
+}
+[data-theme="space"] .sky::after {
+  background-size: 190px 190px;
+  background-position: 40px 60px;
+  opacity: 0.75;
+  animation: twinkleB 5.5s ease-in-out infinite;
+}
+@keyframes twinkleA { 0%, 100% { opacity: 0.55; } 50% { opacity: 1;   } }
+@keyframes twinkleB { 0%, 100% { opacity: 0.3;  } 50% { opacity: 0.8; } }
+[data-theme="space"] .decor { display: block; position: absolute; }
+[data-theme="space"] .d1 {
+  top: 7%; right: 9%; font-size: clamp(3rem, 10vw, 6rem);
+  filter: drop-shadow(0 0 14px rgba(255, 240, 180, 0.6));
+  animation: floatY 6s ease-in-out infinite;
+}
+[data-theme="space"] .d1::before { content: "🌙"; }
+[data-theme="space"] .d2 {
+  top: 40%; left: 5%; font-size: clamp(2.2rem, 8vw, 4.4rem);
+  animation: floatY 8s ease-in-out infinite;
+}
+[data-theme="space"] .d2::before { content: "🪐"; }
+[data-theme="space"] .d3 {
+  bottom: 9%; right: 11%; font-size: clamp(2.2rem, 8vw, 4.2rem);
+  animation: floatY 7s ease-in-out infinite 0.6s;
+}
+[data-theme="space"] .d3::before { content: "🚀"; }
+@keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+/* CSS-drawn shooting star (space theme) — a glowing head with a fading tail,
+   spawned by JS with a random path & speed. No emoji box, blends into the sky. */
+.shooting-star {
+  position: absolute;
+  z-index: 2;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.shooting-star::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.85);
+}
+
+/* ---- theme: "balloon" — pastel party sky, balloons rising + confetti falling ---- */
+[data-theme="balloon"] body {
+  background: linear-gradient(180deg, #8fd3f5 0%, #ffd9ec 55%, #fff3d6 100%);
+}
+/* .sky::before = colorful balloons drifting up with a gentle sway */
+[data-theme="balloon"] .sky::before {
+  background-repeat: repeat;
+  background-size: 320px 420px;
+  opacity: 0.95;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='420'><g stroke='%23b7b7c9' stroke-width='1.3' fill='none'><path d='M55 137 q7 16 -2 34'/><path d='M170 107 q7 16 -2 34'/><path d='M272 169 q7 16 -2 34'/><path d='M108 289 q7 16 -2 34'/><path d='M232 337 q7 16 -2 34'/></g><g><ellipse cx='55' cy='100' rx='24' ry='30' fill='%23ff6b6b'/><polygon points='51,129 59,129 55,137' fill='%23ff6b6b'/><ellipse cx='47' cy='90' rx='5' ry='8' fill='white' opacity='.5'/><ellipse cx='170' cy='70' rx='24' ry='30' fill='%234dabf7'/><polygon points='166,99 174,99 170,107' fill='%234dabf7'/><ellipse cx='162' cy='60' rx='5' ry='8' fill='white' opacity='.5'/><ellipse cx='272' cy='132' rx='24' ry='30' fill='%23ffd43b'/><polygon points='268,161 276,161 272,169' fill='%23ffd43b'/><ellipse cx='264' cy='122' rx='5' ry='8' fill='white' opacity='.5'/><ellipse cx='108' cy='252' rx='24' ry='30' fill='%2351cf66'/><polygon points='104,281 112,281 108,289' fill='%2351cf66'/><ellipse cx='100' cy='242' rx='5' ry='8' fill='white' opacity='.5'/><ellipse cx='232' cy='300' rx='24' ry='30' fill='%23cc5de8'/><polygon points='228,329 236,329 232,337' fill='%23cc5de8'/><ellipse cx='224' cy='290' rx='5' ry='8' fill='white' opacity='.5'/></g></svg>");
+  animation: balloonRise 32s linear infinite;
+}
+/* .sky::after = light confetti sprinkle falling */
+[data-theme="balloon"] .sky::after {
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.85;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><g><rect x='20' y='18' width='7' height='11' rx='2' fill='%23ff6b6b' transform='rotate(20 23 23)'/><rect x='80' y='40' width='6' height='10' rx='2' fill='%234dabf7' transform='rotate(-15 83 45)'/><rect x='140' y='20' width='7' height='11' rx='2' fill='%23ffd43b' transform='rotate(35 143 25)'/><rect x='170' y='70' width='6' height='10' rx='2' fill='%2351cf66' transform='rotate(-25 173 75)'/><rect x='30' y='90' width='7' height='11' rx='2' fill='%23cc5de8' transform='rotate(10 33 95)'/><rect x='100' y='110' width='6' height='10' rx='2' fill='%23ff8cc6' transform='rotate(-30 103 115)'/><rect x='150' y='140' width='7' height='11' rx='2' fill='%234dabf7' transform='rotate(15 153 145)'/><rect x='60' y='150' width='6' height='10' rx='2' fill='%23ffd43b' transform='rotate(-20 63 155)'/><rect x='20' y='170' width='7' height='11' rx='2' fill='%2351cf66' transform='rotate(25 23 175)'/><rect x='120' y='180' width='6' height='10' rx='2' fill='%23ff6b6b' transform='rotate(-10 123 185)'/><rect x='185' y='150' width='6' height='10' rx='2' fill='%23cc5de8' transform='rotate(30 188 155)'/><rect x='90' y='60' width='6' height='10' rx='2' fill='%23ff8cc6' transform='rotate(-35 93 65)'/></g></svg>");
+  animation: confettiFall 11s linear infinite;
+}
+@keyframes balloonRise {
+  0%   { background-position: 0    0;    }
+  25%  { background-position: 14px -105px; }
+  50%  { background-position: 0    -210px; }
+  75%  { background-position: -14px -315px; }
+  100% { background-position: 0    -420px; }
+}
+@keyframes confettiFall { from { background-position: 0 0; } to { background-position: 0 200px; } }
+/* a few party accents gently bobbing in the corners */
+[data-theme="balloon"] .decor {
+  display: block;
+  position: absolute;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.12));
+  animation: floatY 6s ease-in-out infinite;
+}
+[data-theme="balloon"] .d1 { top: 8%; left: 6%; }
+[data-theme="balloon"] .d2 { top: 12%; right: 7%; animation-delay: 1s; }
+[data-theme="balloon"] .d3 { bottom: 10%; left: 8%; animation-delay: 2s; }
+[data-theme="balloon"] .d4 { bottom: 12%; right: 6%; animation-delay: 0.5s; }
+[data-theme="balloon"] .d1::before { content: "🎉"; }
+[data-theme="balloon"] .d2::before { content: "🎊"; }
+[data-theme="balloon"] .d3::before { content: "🥳"; }
+[data-theme="balloon"] .d4::before { content: "🎈"; }
+
+/* ---- theme: "sea" — underwater with rising bubbles and drifting sea critters ---- */
+[data-theme="sea"] body {
+  background: linear-gradient(180deg, #5ecbe0 0%, #1f8fcf 50%, #0b4f8c 100%);
+}
+/* two bubble layers rising at different speeds/sizes */
+[data-theme="sea"] .sky::before,
+[data-theme="sea"] .sky::after {
+  background-repeat: repeat;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='320'><g fill='white' fill-opacity='.16' stroke='white' stroke-opacity='.5' stroke-width='1.4'><circle cx='40' cy='60' r='16'/><circle cx='150' cy='40' r='10'/><circle cx='100' cy='130' r='20'/><circle cx='185' cy='150' r='8'/><circle cx='55' cy='210' r='13'/><circle cx='140' cy='260' r='18'/><circle cx='30' cy='290' r='7'/></g><g fill='white' fill-opacity='.7'><circle cx='34' cy='54' r='3'/><circle cx='146' cy='36' r='2'/><circle cx='92' cy='122' r='4'/><circle cx='133' cy='252' r='3.5'/><circle cx='49' cy='204' r='2.5'/></g></svg>");
+}
+[data-theme="sea"] .sky::before {
+  background-size: 220px 320px;
+  opacity: 0.9;
+  animation: bubbleRiseA 24s linear infinite;
+}
+[data-theme="sea"] .sky::after {
+  background-size: 130px 190px;
+  opacity: 0.6;
+  animation: bubbleRiseB 16s linear infinite;
+}
+@keyframes bubbleRiseA {
+  0%   { background-position: 0    0;    }
+  50%  { background-position: 10px -160px; }
+  100% { background-position: 0    -320px; }
+}
+@keyframes bubbleRiseB {
+  0%   { background-position: 0    0;    }
+  50%  { background-position: -8px -95px; }
+  100% { background-position: 0    -190px; }
+}
+[data-theme="sea"] .decor {
+  display: block;
+  position: absolute;
+  font-size: clamp(3rem, 10vw, 5.2rem);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+}
+[data-theme="sea"] .d1 { top: 16%; left: 8%;   animation: bobSwim 6s ease-in-out infinite;      }
+[data-theme="sea"] .d2 { top: 34%; right: 10%; animation: bobSwim 7s ease-in-out infinite 0.8s; }
+[data-theme="sea"] .d3 { bottom: 16%; left: 12%; animation: bobSwim 8s ease-in-out infinite 0.4s; }
+[data-theme="sea"] .d4 { bottom: 10%; right: 12%; animation: bobSwim 6.5s ease-in-out infinite 1.2s; }
+[data-theme="sea"] .d1::before { content: "🐠"; }
+[data-theme="sea"] .d2::before { content: "🐟"; }
+[data-theme="sea"] .d3::before { content: "🐙"; }
+[data-theme="sea"] .d4::before { content: "🐢"; }
+@keyframes bobSwim {
+  0%, 100% { transform: translate(0, 0)     rotate(-3deg); }
+  50%      { transform: translate(14px, -12px) rotate(3deg); }
+}
+
+/* ---- theme: "meadow" — sunny sky over grass, drifting petals, butterflies ---- */
+[data-theme="meadow"] body {
+  background: linear-gradient(180deg, #a6e4ff 0%, #c9efff 38%, #a6e88f 68%, #6fc95f 100%);
+}
+/* .sky::before = petals gently falling */
+[data-theme="meadow"] .sky::before {
+  background-repeat: repeat;
+  background-size: 240px 240px;
+  background-position: 0 0;
+  opacity: 0.8;
+  animation: petalFall 22s linear infinite;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><g><circle cx='30' cy='40' r='5' fill='%23ffd6ec'/><circle cx='90' cy='20' r='4' fill='%23fff3b0'/><circle cx='150' cy='60' r='6' fill='%23ffc8dd'/><circle cx='210' cy='30' r='4' fill='white'/><circle cx='60' cy='120' r='5' fill='%23fff3b0'/><circle cx='130' cy='150' r='4' fill='%23ffd6ec'/><circle cx='200' cy='130' r='6' fill='white'/><circle cx='40' cy='200' r='4' fill='%23ffc8dd'/><circle cx='110' cy='210' r='5' fill='%23fff3b0'/><circle cx='180' cy='200' r='4' fill='%23ffd6ec'/></g></svg>");
+}
+/* .sky::after = grass + flowers along the bottom (static) */
+[data-theme="meadow"] .sky::after {
+  background-repeat: repeat-x;
+  background-size: 220px 140px;
+  background-position: left bottom;
+  opacity: 1;
+  animation: none;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='140'><g fill='%235bbf46'><path d='M0 140 L10 70 L20 140 Z'/><path d='M18 140 L30 55 L42 140 Z'/><path d='M40 140 L52 80 L64 140 Z'/><path d='M70 140 L82 60 L94 140 Z'/><path d='M100 140 L112 75 L124 140 Z'/><path d='M130 140 L142 50 L154 140 Z'/><path d='M160 140 L172 78 L184 140 Z'/><path d='M190 140 L202 62 L214 140 Z'/></g><g fill='%234aa838'><path d='M10 140 L20 85 L30 140 Z'/><path d='M55 140 L66 70 L77 140 Z'/><path d='M112 140 L123 88 L134 140 Z'/><path d='M175 140 L186 72 L197 140 Z'/></g><g><rect x='47' y='60' width='2.5' height='50' fill='%234aa838'/><circle cx='48' cy='55' r='9' fill='%23ffd43b'/><circle cx='48' cy='55' r='4' fill='%23ff9a3c'/><rect x='147' y='52' width='2.5' height='58' fill='%234aa838'/><circle cx='148' cy='47' r='9' fill='%23ff7aa8'/><circle cx='148' cy='47' r='4' fill='%23fff3b0'/></g></svg>");
+}
+@keyframes petalFall { from { background-position: 0 0; } to { background-position: 0 240px; } }
+[data-theme="meadow"] .decor {
+  display: block;
+  position: absolute;
+  font-size: clamp(2.4rem, 7.5vw, 3.8rem);
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.15));
+}
+[data-theme="meadow"] .d1 { top: 18%; left: 12%; animation: flutter 7s ease-in-out infinite;      }
+[data-theme="meadow"] .d2 { top: 12%; right: 14%; animation: flutter 6s ease-in-out infinite 0.5s; }
+[data-theme="meadow"] .d3 { bottom: 30%; left: 16%; animation: flutter 8s ease-in-out infinite 1s;  }
+[data-theme="meadow"] .d4 { top: 7%; right: 7%; font-size: clamp(2.8rem, 8vw, 4.2rem); animation: floatY 6s ease-in-out infinite; }
+[data-theme="meadow"] .d1::before { content: "🦋"; }
+[data-theme="meadow"] .d2::before { content: "🐝"; }
+[data-theme="meadow"] .d3::before { content: "🦋"; }
+[data-theme="meadow"] .d4::before { content: "☀️"; }
+@keyframes flutter {
+  0%   { transform: translate(0, 0)      rotate(-6deg); }
+  25%  { transform: translate(10px, -14px) rotate(6deg);  }
+  50%  { transform: translate(20px, -4px)  rotate(-4deg); }
+  75%  { transform: translate(8px, -18px)  rotate(8deg);  }
+  100% { transform: translate(0, 0)      rotate(-6deg); }
+}
+
+/* ---- theme: "dino" — prehistoric jungle with rolling hills, ferns & dinosaurs ---- */
+[data-theme="dino"] body {
+  background: linear-gradient(180deg, #ffe1a8 0%, #ffc97a 30%, #a7c86a 68%, #6fa84a 100%);
+}
+/* .sky::before = distant rolling hills */
+[data-theme="dino"] .sky::before {
+  background-repeat: repeat-x;
+  background-size: 320px 180px;
+  background-position: left bottom;
+  opacity: 0.85;
+  animation: none;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='180'><g fill='%237bb85a'><ellipse cx='60' cy='210' rx='120' ry='90'/><ellipse cx='220' cy='220' rx='140' ry='100'/><ellipse cx='330' cy='215' rx='110' ry='95'/></g></svg>");
+}
+/* .sky::after = foreground ferns */
+[data-theme="dino"] .sky::after {
+  background-repeat: repeat-x;
+  background-size: 200px 150px;
+  background-position: left bottom;
+  opacity: 1;
+  animation: none;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150'><g fill='%23356b2e'><path d='M20 150 Q10 90 30 70 Q22 100 40 150 Z'/><path d='M60 150 Q50 80 74 60 Q64 95 84 150 Z'/><path d='M110 150 Q100 95 120 78 Q112 110 128 150 Z'/><path d='M150 150 Q140 85 166 66 Q154 100 176 150 Z'/></g></svg>");
+}
+[data-theme="dino"] .decor {
+  display: block;
+  position: absolute;
+  font-size: clamp(2.8rem, 9.5vw, 4.8rem);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+}
+[data-theme="dino"] .d1 { bottom: 14%; left: 8%;  animation: walkBob 3s ease-in-out infinite;      }
+[data-theme="dino"] .d2 { bottom: 15%; right: 9%; animation: walkBob 3.4s ease-in-out infinite 0.4s; }
+[data-theme="dino"] .d3 { top: 10%; right: 6%; }                       /* volcano, static */
+[data-theme="dino"] .d4 { bottom: 30%; right: 26%; }                   /* palm, static */
+[data-theme="dino"] .d1::before { content: "🦕"; }
+[data-theme="dino"] .d2::before { content: "🦖"; }
+[data-theme="dino"] .d3::before { content: "🌋"; }
+[data-theme="dino"] .d4::before { content: "🌴"; }
+@keyframes walkBob {
+  0%, 100% { transform: translateY(0)   rotate(-1deg); }
+  50%      { transform: translateY(-8px) rotate(1deg); }
+}
+
+/* ---- theme switch button: a silly angled starburst "sticker" (top-left) ---- */
+.theme-btn {
+  --burst: polygon(50.0% 0.0%, 58.2% 13.9%, 71.7% 5.0%, 73.1% 21.1%, 89.1% 18.8%, 83.3% 33.9%, 98.7% 38.9%, 87.0% 50.0%, 98.7% 61.1%, 83.3% 66.1%, 89.1% 81.2%, 73.1% 78.9%, 71.7% 95.0%, 58.2% 86.1%, 50.0% 100.0%, 41.8% 86.1%, 28.3% 95.0%, 26.9% 78.9%, 10.9% 81.2%, 16.7% 66.1%, 1.3% 61.1%, 13.0% 50.0%, 1.3% 38.9%, 16.7% 33.9%, 10.9% 18.8%, 26.9% 21.1%, 28.3% 5.0%, 41.8% 13.9%);
+  position: fixed;
+  top: 6px;
+  left: 6px;
+  z-index: 60;
+  width: clamp(94px, 24vw, 122px);
+  height: clamp(94px, 24vw, 122px);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: none;
+  background: #ff3b6b;                 /* outer rim colour */
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  clip-path: var(--burst);
+  transform: rotate(-12deg);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  transition: transform 0.12s ease;
+}
+.theme-btn::before {                    /* inner face */
+  content: "";
+  position: absolute;
+  inset: 7px;
+  background: #ffd43b;
+  clip-path: var(--burst);
+}
+.theme-btn-text {
+  position: relative;
+  font-family: var(--font);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-size: clamp(0.62rem, 2.3vw, 0.8rem);
+  line-height: 1.1;
+  color: #3a2c4a;
+  text-align: center;
+}
+.theme-btn-icon {
+  display: block;
+  font-size: 1.5em;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.theme-btn:hover { transform: rotate(-6deg) scale(1.07); }
+.theme-btn:active { transform: rotate(-12deg) scale(0.95); }
+.theme-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
 /* ---- layout ---- */
 .app {
@@ -89,6 +437,16 @@ body {
   color: #fff;
   font-weight: bold;
   opacity: 0.95;
+}
+
+/* On wide screens the corner sticker sits in the left margin, clear of the
+   centered title. Once the layout narrows enough that they'd collide, shrink
+   the title and reserve space on the left so it shifts to the right of the
+   sticker instead of overlapping (or being clipped by) it.
+   NOTE: this must come after the base .title rule to win the cascade. */
+@media (max-width: 900px) {
+  .topbar { padding-left: clamp(80px, 23vw, 120px); }
+  .title  { font-size: clamp(1.25rem, 5.4vw, 2.6rem); }
 }
 
 /* ---- day banner ---- */
@@ -380,5 +738,5 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cloud, .title-emoji, .hero, .hero-star { animation: none; }
+  .sky::before, .sky::after, .decor, .title-emoji, .hero, .hero-star { animation: none; }
 }
