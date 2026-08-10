@@ -1,0 +1,14 @@
+# Editor / assistant local settings
+.claude/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Scraper atomic-write temp files
+data/*.tmp.*
+web/data/*.tmp.*
+*.tmp
+
+# Logs
+*.log

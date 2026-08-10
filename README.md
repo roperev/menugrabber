@@ -8,6 +8,28 @@ A daily cron job scrapes the district's menu into a local `menu.json`; the stati
 web page reads that file. No database, no backend app, no runtime dependencies on
 the web server beyond the once-a-day script.
 
+## Features
+
+- 🍱 Today's lunch at a glance, with the **main dish** as a glowing "star" hero card
+- ☀️ One-tap **Tomorrow's Menu**, plus Day-Before / Today / Next-Day browsing
+- 🔗 Deep-link to any date via `?day=YYYY-MM-DD` (or `MM-DD-YYYY`)
+- 🍗 Auto-matched food emojis (chicken, corn dog, cheese, milk, fruit, …)
+- 🎉 Playful tap effects and a confetti cannon, kid-tested silliness
+- 📅 "Last updated" badge, friendly weekend / no-school fallback
+- 🪶 100% static front-end — vanilla HTML/CSS/JS, **no build step, no external CDNs**
+- ♿ Responsive (phone → wall tablet) and honors `prefers-reduced-motion`
+
+## Screenshots
+
+The dashboard on a wide screen — glowing "star" main dish, color-coded sides, and
+floating food peeking through the translucent cards:
+
+![MenuGrabber dashboard on desktop](screenshots/SCR-20260810-jqhb.jpeg)
+
+| On a phone (stacks to two columns) | Weekends & no-school days |
+|:----------------------------------:|:-------------------------:|
+| ![MenuGrabber on mobile](screenshots/SCR-20260810-jqzi.png) | ![Weekend "no school lunch" fallback](screenshots/SCR-20260810-jqqi.png) |
+
 ```
 MenuGrabber/
 ├── scraper/grab_menu.sh     # daily: fetch LinqConnect API → data/menu.json
@@ -36,10 +58,14 @@ MenuGrabber/
 Each food item also gets fun auto-matched emojis (🍗 chicken, 🌭 corn dog, 🧀 cheese,
 🥛 milk, …), and the **Main Dish** is shown as a glowing "star" hero card.
 
-**Just for fun:** tapping a whole card triggers a random silly effect (a beam racing
-around the border, a rainbow shimmer, a confetti/cloud burst, a wobble…), and tapping
-an individual food item pops a little confetti and toggles it to a darker "picked"
-shade. It's purely playful — nothing navigates or saves.
+**Just for fun (all purely playful — nothing navigates or saves):**
+- Tap a whole **card** → a random silly effect: a glowing beam racing around the
+  border, a rainbow shimmer, a confetti or cloud burst, a wobble, or a sparkle pop.
+- Tap a **food item** → a little confetti pop at your finger and it toggles to a
+  darker "picked" shade. **Picking** an item also fires a full-screen confetti cannon
+  from both bottom corners that arcs up and rains down (un-picking doesn't).
+- All the big motion respects `prefers-reduced-motion` (the confetti cannon is skipped
+  for users who ask for reduced motion).
 
 The API needs no login, but its firewall rejects plain requests — the scraper sends
 browser-like headers (`User-Agent`, `Origin`, `Referer`) to get JSON back.
@@ -59,8 +85,8 @@ the nav buttons let you browse around it.
 
 ## Deploy (you copy files to the server manually)
 
-Target machine: your Apache box at `10.0.21.38`, content dir
-`/var/www/rprnt/menugrabber`.
+Target: any Apache host, content dir `/var/www/<site>/menugrabber` (examples below
+use `/var/www/rprnt/menugrabber`, served at `/menugrabber`). Adjust paths to your setup.
 
 ### 1. Copy the files
 Copy the **contents of `web/`** and the **scraper** to the server, e.g.:
@@ -187,7 +213,18 @@ card) — step back with **◀ Day Before** to reach the seeded week, or re-seed
 
 ## Data source
 
-LinqConnect public API (no auth):
+LinqConnect public API (no auth, no keys):
 `GET https://api.linqconnect.com/api/FamilyMenu?buildingId=…&districtId=…&startDate=MM-DD-YYYY&endDate=MM-DD-YYYY`
 with headers `Origin: https://linqconnect.com` and `Referer: https://linqconnect.com/`.
 Original public page: <https://linqconnect.com/public/menu/TFCNC9>
+
+The building/district IDs and the `TFCNC9` menu code in this repo are the same public
+identifiers LinqConnect exposes in its own page URLs — there are no credentials, tokens,
+or private data anywhere in this project.
+
+## Disclaimer
+
+An unofficial, personal hobby project. Not affiliated with, endorsed by, or supported
+by any school district or LinqConnect / TITAN. It reads a publicly accessible menu
+endpoint once a day for personal use; please be respectful of the source and don't
+hammer it. Menu data belongs to its respective owners.
