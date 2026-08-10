@@ -30,7 +30,7 @@ For **local development** (optional):
 - 🔗 Deep-link to any date via `?day=YYYY-MM-DD` (or `MM-DD-YYYY`)
 - 🍗 Auto-matched food emojis (chicken, corn dog, cheese, milk, fruit, …)
 - 🎉 Playful tap effects and a confetti cannon, kid-tested silliness
-- 🎨 Seven switchable background themes (cloudy sky · candy/food · outer space · balloon party · under the sea · sunny meadow · dino world) via a starburst "Change Theme" sticker in the top-left corner
+- 🎨 Seven switchable background themes (cloudy sky · outer space · balloon party · under the sea · sunny meadow · dino world · candy/food) via a starburst "Change Theme" sticker in the top-left corner
 - 📅 "Last updated" badge, friendly weekend / no-school fallback
 - 🪶 100% static front-end — vanilla HTML/CSS/JS, **no build step, no external CDNs**
 - ♿ Responsive (phone → wall tablet) and honors `prefers-reduced-motion`
@@ -54,14 +54,14 @@ saved and restored on your next visit (until you change it again).
 <table>
   <tr>
     <td align="center"><img src="screenshots/theme-sky.png" width="150" alt="Cloudy Sky theme"><br><b>Cloudy Sky</b><br><sub>default</sub></td>
-    <td align="center"><img src="screenshots/theme-candy.png" width="150" alt="Candy Fun theme"><br><b>Candy Fun</b></td>
     <td align="center"><img src="screenshots/theme-space.png" width="150" alt="Outer Space theme"><br><b>Outer Space</b></td>
     <td align="center"><img src="screenshots/theme-balloon.png" width="150" alt="Balloon Party theme"><br><b>Balloon Party</b></td>
+    <td align="center"><img src="screenshots/theme-sea.png" width="150" alt="Under the Sea theme"><br><b>Under the Sea</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="screenshots/theme-sea.png" width="150" alt="Under the Sea theme"><br><b>Under the Sea</b></td>
     <td align="center"><img src="screenshots/theme-meadow.png" width="150" alt="Sunny Meadow theme"><br><b>Sunny Meadow</b></td>
     <td align="center"><img src="screenshots/theme-dino.png" width="150" alt="Dino World theme"><br><b>Dino World</b></td>
+    <td align="center"><img src="screenshots/theme-candy.png" width="150" alt="Candy Fun theme"><br><b>Candy Fun</b><br><sub>original</sub></td>
     <td></td>
   </tr>
 </table>
@@ -124,13 +124,13 @@ the nav buttons let you browse around it.
 ### Themes
 The **🎨 Try a New Theme** starburst sticker in the top-left corner cycles the
 background theme and remembers your choice in `localStorage`. First-time visitors
-see the default, an animated flat-bottomed **cloudy sky** (`THEMES[0]`). The others:
-a **candy/food** theme, an **outer space** starfield with a moon, planet, rocket &
-randomized shooting stars, a **balloon party** with rising balloons & confetti, an
-**under the sea** scene with rising bubbles & drifting fish, a **sunny meadow** with
-falling petals, a flower-dotted grass line & fluttering butterflies, and a **dino
-world** with rolling hills, ferns, a volcano & roaming dinosaurs. Adding a new theme
-is two small steps:
+see the default, an animated flat-bottomed **cloudy sky** (`THEMES[0]`). The others,
+in cycle order: an **outer space** starfield with a moon, planet, rocket & randomized
+shooting stars, a **balloon party** with rising balloons & confetti, an **under the
+sea** scene with rising bubbles & drifting fish, a **sunny meadow** with falling
+petals, a flower-dotted grass line & fluttering butterflies, a **dino world** with
+rolling hills, ferns, a volcano & roaming dinosaurs, and finally the original
+**candy/food** theme with floating snacks. Adding a new theme is two small steps:
 
 1. In `styles.css`, add a `[data-theme="your-id"]` block: set the `body`
    background, optionally reuse the two `.sky` layers (`::before`/`::after`) for a
