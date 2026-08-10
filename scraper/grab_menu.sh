@@ -18,7 +18,7 @@
 #   START_DATE    Override start date as M-D-YYYY (mainly for testing off-season)
 #
 # Example (local dev, seed a known school week):
-#   OUT_FILE=web/data/menu.json START_DATE=9-8-2025 ./scraper/grab_menu.sh
+#   OUT_FILE=data/menu.json START_DATE=9-8-2025 ./scraper/grab_menu.sh
 #
 set -euo pipefail
 
