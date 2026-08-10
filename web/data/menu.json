@@ -1,0 +1,352 @@
+{
+  "school": "Westfield Elementary",
+  "district": "Alpine School District",
+  "last_updated": "2026-08-08T14:21:04-0600",
+  "days": {
+    "2026-08-19": {
+      "categories": [
+        {
+          "name": "Main Entree",
+          "items": [
+            "Chicken Nuggets",
+            "Chicken Corn Dog",
+            "Grape Uncrustables"
+          ]
+        },
+        {
+          "name": "Side",
+          "items": [
+            "String Cheese"
+          ]
+        },
+        {
+          "name": "Vegetable",
+          "items": [
+            "Potato Twister Fries",
+            "Side Salad"
+          ]
+        },
+        {
+          "name": "Fruit",
+          "items": [
+            "Cinnamon Applesauce",
+            "Watermelon, Fresh"
+          ]
+        },
+        {
+          "name": "Milk",
+          "items": [
+            "1% White Milk",
+            "Fat Free Chocolate Milk"
+          ]
+        }
+      ]
+    },
+    "2026-08-20": {
+      "categories": [
+        {
+          "name": "Main Entree",
+          "items": [
+            "Taco Soup",
+            "Deli Sandwich (Ham & Turkey)",
+            "Grape Uncrustables"
+          ]
+        },
+        {
+          "name": "Side",
+          "items": [
+            "Doritos Cool Ranch Chips",
+            "Baked Scoops Chips",
+            "String Cheese"
+          ]
+        },
+        {
+          "name": "Vegetable",
+          "items": [
+            "Fresh Veggie Bag (Cuc/Tom/Car)",
+            "Green Beans"
+          ]
+        },
+        {
+          "name": "Fruit",
+          "items": [
+            "Fresh Peaches",
+            "Mandarin Oranges"
+          ]
+        },
+        {
+          "name": "Milk",
+          "items": [
+            "1% White Milk",
+            "Fat Free Chocolate Milk"
+          ]
+        }
+      ]
+    },
+    "2026-08-21": {
+      "categories": [
+        {
+          "name": "Main Entree",
+          "items": [
+            "Big Daddy's Cheese Pizza",
+            "Big Daddy's Pepperoni Pizza",
+            "Chicken Wrap",
+            "Grape Uncrustables"
+          ]
+        },
+        {
+          "name": "Side",
+          "items": [
+            "String Cheese",
+            "Bug Bites Grahams Crackers"
+          ]
+        },
+        {
+          "name": "Vegetable",
+          "items": [
+            "Bagged Baby Carrots",
+            "Baked Beans"
+          ]
+        },
+        {
+          "name": "Fruit",
+          "items": [
+            "Apple Crunchables",
+            "Grapes"
+          ]
+        },
+        {
+          "name": "Milk",
+          "items": [
+            "1% White Milk",
+            "Fat Free Chocolate Milk"
+          ]
+        }
+      ]
+    },
+    "2026-08-24": {
+      "categories": [
+        {
+          "name": "Main Entree",
+          "items": [
+            "French Toast Sticks",
+            "Hamburger on a Bun",
+            "Uncrustables Strawberry"
+          ]
+        },
+        {
+          "name": "Side",
+          "items": [
+            "Egg Omelet w/ Cheese",
+            "String Cheese"
+          ]
+        },
+        {
+          "name": "Vegetable",
+          "items": [
+            "Potato Smiles",
+            "Bagged Baby Carrots"
+          ]
+        },
+        {
+          "name": "Fruit",
+          "items": [
+            "Banana",
+            "Diced Peaches"
+          ]
+        },
+        {
+          "name": "Milk",
+          "items": [
+            "1% White Milk",
+            "Fat Free Chocolate Milk"
+          ]
+        }
+      ]
+    },
+    "2026-08-25": {
+      "categories": [
+        {
+          "name": "Main Entree",
+          "items": [
+            "Beef Soft Tacos",
+            "Hot Dog on a Bun",
+            "Uncrustables Strawberry"
+          ]
+        },
+        {
+          "name": "Side",
+          "items": [
+            "Goldfish Crackers",
+            "String Cheese"
+          ]
+        },
+        {
+          "name": "Vegetable",
+          "items": [
+            "Refried Beans",
+            "Side Salad"
+          ]
+        },
+        {
+          "name": "Fruit",
+          "items": [
+            "Fresh Fruit Assortment"
+          ]
+        },
+        {
+          "name": "Fruit Juice",
+          "items": [
+            "Froot Jooce Cup Variety"
+          ]
+        },
+        {
+          "name": "Milk",
+          "items": [
+            "1% White Milk",
+            "Fat Free Chocolate Milk"
+          ]
+        }
+      ]
+    },
+    "2026-08-26": {
+      "categories": [
+        {
+          "name": "Main Entree",
+          "items": [
+            "Mini Calzones",
+            "Crispy Chicken Sandwich",
+            "Uncrustables Strawberry",
+            "Gold Creek Spicy Chicken Sandwich"
+          ]
+        },
+        {
+          "name": "Side",
+          "items": [
+            "Original Sunchips"
+          ]
+        },
+        {
+          "name": "Vegetable",
+          "items": [
+            "Marinara Sauce",
+            "Colorful Carrots",
+            "Side Salad"
+          ]
+        },
+        {
+          "name": "Fruit",
+          "items": [
+            "Fresh Fruit Assortment",
+            "Canned Fruit"
+          ]
+        },
+        {
+          "name": "Milk",
+          "items": [
+            "Fat Free Chocolate Milk",
+            "1% White Milk"
+          ]
+        },
+        {
+          "name": "Dessert",
+          "items": [
+            "Chocolate Chip Cookies"
+          ]
+        }
+      ]
+    },
+    "2026-08-27": {
+      "categories": [
+        {
+          "name": "Main Entree",
+          "items": [
+            "Alpine Chicken Bowl (Elementary)",
+            "Ham and Cheese Melt",
+            "Uncrustables Strawberry"
+          ]
+        },
+        {
+          "name": "Side",
+          "items": [
+            "Homemade Roll",
+            "String Cheese"
+          ]
+        },
+        {
+          "name": "Vegetable",
+          "items": [
+            "Corn",
+            "Fresh Vegetable Bags  (cel/tom/car)"
+          ]
+        },
+        {
+          "name": "Fruit",
+          "items": [
+            "Fresh Fruit Assortment"
+          ]
+        },
+        {
+          "name": "Fruit Juice",
+          "items": [
+            "Apple Juice"
+          ]
+        },
+        {
+          "name": "Milk",
+          "items": [
+            "1% White Milk",
+            "Fat Free Chocolate Milk"
+          ]
+        }
+      ]
+    },
+    "2026-08-28": {
+      "categories": [
+        {
+          "name": "Main Entree",
+          "items": [
+            "Cheese Pizza Dippers",
+            "Pepperoni Pizza Dippers",
+            "Mini Corndogs",
+            "Uncrustables Strawberry"
+          ]
+        },
+        {
+          "name": "Side",
+          "items": [
+            "Raspberry Yogurt"
+          ]
+        },
+        {
+          "name": "Vegetable",
+          "items": [
+            "Fresh Vegetable Bags  (cel/tom/car)",
+            "Steamed Peas",
+            "Marinara Sauce"
+          ]
+        },
+        {
+          "name": "Fruit",
+          "items": [
+            "Fresh Fruit Assortment",
+            "Canned Fruit"
+          ]
+        },
+        {
+          "name": "Milk",
+          "items": [
+            "1% White Milk",
+            "Fat Free Chocolate Milk"
+          ]
+        },
+        {
+          "name": "Dessert",
+          "items": [
+            "Scooby Snacks"
+          ]
+        }
+      ]
+    }
+  }
+}

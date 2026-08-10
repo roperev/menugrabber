@@ -1,0 +1,29 @@
+# ============================================================
+# MenuGrabber — daily menu refresh
+#
+# IMPORTANT: the cron line format differs by WHERE you install it.
+#
+# -------- Option A: a USER crontab (e.g. root's) — NO user field --------
+#   Run:  crontab -e        (as the user you want it to run as, e.g. root)
+#   Add this line (note: NO "www-data" / user column here):
+#
+#       7 5 * * * /var/www/rprnt/menugrabber/scraper/grab_menu.sh >> /var/log/menugrabber.log 2>&1
+#
+#   Running as root is fine: the script writes menu.json as world-readable
+#   (0644), so Apache can serve it regardless of file owner.
+#
+# -------- Option B: system /etc/cron.d — REQUIRES a user field --------
+#   sudo cp deploy/menugrabber.cron /etc/cron.d/menugrabber
+#   sudo chmod 644 /etc/cron.d/menugrabber
+#   This file below is in the /etc/cron.d form (has the user column).
+#   Change "root" if you prefer another user that can write the data dir.
+#
+# Notes:
+#   * Runs at 5:07am local daily (off the :00 mark on purpose).
+#   * The 21-day fetch window means a single missed run is harmless.
+#   * PATH is set so cron can find curl / jq / date.
+# ============================================================
+PATH=/usr/local/bin:/usr/bin:/bin
+
+# ----- /etc/cron.d form (Option B): m h dom mon dow  USER  command -----
+  7  5  *   *   *   root   /var/www/rprnt/menugrabber/scraper/grab_menu.sh >> /var/log/menugrabber.log 2>&1
