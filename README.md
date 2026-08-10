@@ -8,6 +8,21 @@ A daily cron job scrapes the district's menu into a local `menu.json`; the stati
 web page reads that file. No database, no backend app, no runtime dependencies on
 the web server beyond the once-a-day script.
 
+## Requirements
+
+To **host** it (a small Linux box is plenty):
+
+- **Apache** — or any web server that can serve static files
+- **cron** — runs the daily menu refresh
+- **bash**, **curl**, **jq**, and **GNU `date`** — used by the scraper
+  (`sudo apt-get install -y curl jq`; the rest ship with a standard Linux install)
+- Outbound HTTPS access to `api.linqconnect.com`
+
+For **local development** (optional):
+
+- **python3** (`python3 -m http.server`) or any static file server
+- the scraper tools above, if you want to regenerate `menu.json` yourself
+
 ## Features
 
 - 🍱 Today's lunch at a glance, with the **main dish** as a glowing "star" hero card
@@ -85,14 +100,15 @@ the nav buttons let you browse around it.
 
 ## Deploy (you copy files to the server manually)
 
-Target: any Apache host, content dir `/var/www/<site>/menugrabber` (examples below
-use `/var/www/rprnt/menugrabber`, served at `/menugrabber`). Adjust paths to your setup.
+Throughout the commands below, **`<site>`** is the MenuGrabber content directory on
+your server (for example `/var/www/html/menugrabber`), served at the `/menugrabber`
+URL path. Adjust it to match your setup.
 
 ### 1. Copy the files
 Copy the **contents of `web/`** and the **scraper** to the server, e.g.:
 
 ```
-/var/www/rprnt/menugrabber/
+<site>/
 ├── index.html
 ├── styles.css
 ├── app.js
@@ -103,10 +119,10 @@ Copy the **contents of `web/`** and the **scraper** to the server, e.g.:
 Make the script executable and ensure the `data/` dir is writable by the cron user:
 
 ```bash
-chmod +x /var/www/rprnt/menugrabber/scraper/grab_menu.sh
-mkdir -p /var/www/rprnt/menugrabber/data
+chmod +x <site>/scraper/grab_menu.sh
+mkdir -p <site>/data
 # whoever the cron job runs as must be able to write here:
-chown -R www-data:www-data /var/www/rprnt/menugrabber/data
+chown -R www-data:www-data <site>/data
 ```
 
 ### 2. Prerequisites on the box
@@ -119,15 +135,15 @@ sudo apt-get install -y curl jq
 
 ### 3. Seed the data once (so the page isn't empty before the first cron run)
 ```bash
-/var/www/rprnt/menugrabber/scraper/grab_menu.sh
-cat /var/www/rprnt/menugrabber/data/menu.json | jq '.days | keys'
+<site>/scraper/grab_menu.sh
+cat <site>/data/menu.json | jq '.days | keys'
 ```
 > During summer / breaks the API returns no days — that's expected. To seed a
 > realistic sample for testing, point it at a school week:
-> `START_DATE=09-08-2025 /var/www/rprnt/menugrabber/scraper/grab_menu.sh`
+> `START_DATE=09-08-2025 <site>/scraper/grab_menu.sh`
 
 ### 4. Apache
-See `deploy/menugrabber.conf`. If `/var/www/rprnt` is already the `rprnt.com`
+See `deploy/menugrabber.conf`. If `<site>`'s parent is already your site's
 DocumentRoot (most likely), `/menugrabber` just works as a subfolder — install the
 conf for the correct `.json` MIME type and directory permissions:
 
@@ -144,7 +160,7 @@ The cron line format depends on **where** you install it — this trips people u
 
 - **A user crontab** (e.g. `sudo crontab -e` as root) has **no user field**:
   ```cron
-  7 5 * * * /var/www/rprnt/menugrabber/scraper/grab_menu.sh >> /var/log/menugrabber.log 2>&1
+  7 5 * * * <site>/scraper/grab_menu.sh >> /var/log/menugrabber.log 2>&1
   ```
   (Putting `www-data` here makes cron treat it as the command → `www-data: not found`.)
   Running as root is fine — the script writes `menu.json` as world-readable (0644),
@@ -170,7 +186,7 @@ The scraper reads these environment variables (all have sensible defaults baked 
 | `DISTRICT_ID`   | Alpine School District GUID                | Which district                 |
 | `SCHOOL_NAME`   | `Westfield Elementary`                     | Shown in the page header       |
 | `DISTRICT_NAME` | `Alpine School District`                   | Stored in the JSON             |
-| `OUT_FILE`      | `/var/www/rprnt/menugrabber/data/menu.json`| Where to write output          |
+| `OUT_FILE`      | `<site>/data/menu.json`| Where to write output          |
 | `DAYS_AHEAD`    | `21`                                       | Size of the fetch window       |
 | `START_DATE`    | (today)                                     | `MM-DD-YYYY` override, testing |
 
@@ -206,8 +222,8 @@ card) — step back with **◀ Day Before** to reach the seeded week, or re-seed
 | Scraper prints `HTTP 404 District not found` | `DISTRICT_ID` is wrong/empty. |
 | `jq: command not found`              | `sudo apt-get install jq`                                           |
 | Page shows "Couldn't load the menu"  | `data/menu.json` missing or not served — run the scraper; check the Apache `.json` MIME type. |
-| `data/menu.json` returns **403 Forbidden** | Apache (`www-data`) can't read the file/dir. Fix perms: `sudo chmod 755 /var/www/rprnt/menugrabber /var/www/rprnt/menugrabber/data` and `sudo chmod 644 /var/www/rprnt/menugrabber/data/menu.json`. The scraper now writes 644 automatically. |
-| Scraper: `permission denied` / `cannot create` on write | The user running it can't write `OUT_FILE`. Run as a user who owns the `data/` dir (or `sudo`), or `sudo chown -R www-data:www-data /var/www/rprnt/menugrabber/data`. |
+| `data/menu.json` returns **403 Forbidden** | Apache (`www-data`) can't read the file/dir. Fix perms: `sudo chmod 755 <site> <site>/data` and `sudo chmod 644 <site>/data/menu.json`. The scraper now writes 644 automatically. |
+| Scraper: `permission denied` / `cannot create` on write | The user running it can't write `OUT_FILE`. Run as a user who owns the `data/` dir (or `sudo`), or `sudo chown -R www-data:www-data <site>/data`. |
 | Page shows "No school lunch"         | Correct on weekends/holidays/summer, or if today is outside the fetched window. |
 | `menu.json` is empty `{"days":{}}`   | It's a non-school period — the API genuinely has no menu. |
 
