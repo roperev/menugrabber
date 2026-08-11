@@ -30,7 +30,7 @@ For **local development** (optional):
 - 🔗 Deep-link to any date via `?day=YYYY-MM-DD` (or `MM-DD-YYYY`)
 - 🍗 Auto-matched food emojis (chicken, corn dog, cheese, milk, fruit, …)
 - 🎉 Playful tap effects and a confetti cannon, kid-tested silliness
-- 🎨 Eight switchable background themes (cloudy sky · outer space · balloon party · under the sea · sunny meadow · dino world · rainbow unicorn · candy/food) via a starburst "Change Theme" sticker in the top-left corner
+- 🎨 Twelve switchable background themes (cloudy sky · outer space · balloon party · under the sea · sunny meadow · dino world · rainbow unicorn · winter wonderland · construction zone · barnyard farm · enchanted castle · candy/food) via a starburst "Change Theme" sticker in the top-left corner
 - 📅 "Last updated" badge, friendly weekend / no-school fallback
 - 🪶 100% static front-end — vanilla HTML/CSS/JS, **no build step, no external CDNs**
 - ♿ Responsive (phone → wall tablet) and honors `prefers-reduced-motion`
@@ -62,6 +62,12 @@ saved and restored on your next visit (until you change it again).
     <td align="center"><img src="screenshots/theme-meadow.png" width="150" alt="Sunny Meadow theme"><br><b>Sunny Meadow</b></td>
     <td align="center"><img src="screenshots/theme-dino.png" width="150" alt="Dino World theme"><br><b>Dino World</b></td>
     <td align="center"><img src="screenshots/theme-rainbow.png" width="150" alt="Rainbow Unicorn theme"><br><b>Rainbow Unicorn</b></td>
+    <td align="center"><img src="screenshots/theme-winter.png" width="150" alt="Winter Wonderland theme"><br><b>Winter Wonderland</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/theme-construction.png" width="150" alt="Construction Zone theme"><br><b>Construction Zone</b></td>
+    <td align="center"><img src="screenshots/theme-farm.png" width="150" alt="Barnyard Farm theme"><br><b>Barnyard Farm</b></td>
+    <td align="center"><img src="screenshots/theme-castle.png" width="150" alt="Enchanted Castle theme"><br><b>Enchanted Castle</b></td>
     <td align="center"><img src="screenshots/theme-candy.png" width="150" alt="Candy Fun theme"><br><b>Candy Fun</b><br><sub>original</sub></td>
   </tr>
 </table>
@@ -130,8 +136,12 @@ shooting stars, a **balloon party** with rising balloons & confetti, an **under 
 sea** scene with rising bubbles & drifting fish, a **sunny meadow** with falling
 petals, a flower-dotted grass line & fluttering butterflies, a **dino world** with
 rolling hills, ferns, a volcano & roaming dinosaurs, a **rainbow unicorn** with a
-pastel-rainbow sky, floating unicorn & drifting sparkles, and finally the original
-**candy/food** theme with floating snacks. Adding a new theme is two small steps:
+pastel-rainbow sky, floating unicorn & drifting sparkles, a **winter wonderland** with
+falling snow, a snowman, penguin & evergreens, a **construction zone** with diggers, a
+crane, a worker & traffic cones, a **barnyard farm** with a barn, fences, haystacks &
+farm animals, an **enchanted castle** with a twilight sky, twinkling stars, a moon & a
+fairy, and finally the original **candy/food** theme with floating snacks. Adding a new
+theme is two small steps:
 
 1. In `styles.css`, add a `[data-theme="your-id"]` block: set the `body`
    background, optionally reuse the two `.sky` layers (`::before`/`::after`) for a
