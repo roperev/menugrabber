@@ -51,8 +51,13 @@ body {
   background-repeat: repeat-x;
   /* Flat-bottomed "Toy Story"-style clouds: puffy rounded tops sitting on a
      flat base. Each circle's lowest point is at (or above) the rect's flat
-     bottom edge, so the silhouette stays flat along the bottom. */
-  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='460' height='360'><defs><filter id='b'><feGaussianBlur stdDeviation='2.5'/></filter></defs><g fill='white' filter='url(%23b)'><rect x='70' y='114' width='190' height='36' rx='16'/><circle cx='110' cy='112' r='38'/><circle cx='160' cy='90' r='56'/><circle cx='215' cy='110' r='40'/><circle cx='250' cy='120' r='30'/><circle cx='92' cy='124' r='26'/><rect x='255' y='266' width='170' height='34' rx='15'/><circle cx='295' cy='262' r='38'/><circle cx='340' cy='240' r='50'/><circle cx='390' cy='264' r='36'/><circle cx='300' cy='252' r='28'/><circle cx='415' cy='272' r='26'/></g></svg>");
+     bottom edge, so the silhouette stays flat along the bottom.
+     NOTE: deliberately NO SVG blur filter here — a filtered background is very
+     expensive to animate on low-power browsers (e.g. a smart-fridge display),
+     and this is the only theme that would use one. The overlapping circles
+     already read as a soft cloud; keeping it filter-free makes it scroll as
+     smoothly as the other themes. */
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='460' height='360'><g fill='white'><rect x='70' y='114' width='190' height='36' rx='16'/><circle cx='110' cy='112' r='38'/><circle cx='160' cy='90' r='56'/><circle cx='215' cy='110' r='40'/><circle cx='250' cy='120' r='30'/><circle cx='92' cy='124' r='26'/><rect x='255' y='266' width='170' height='34' rx='15'/><circle cx='295' cy='262' r='38'/><circle cx='340' cy='240' r='50'/><circle cx='390' cy='264' r='36'/><circle cx='300' cy='252' r='28'/><circle cx='415' cy='272' r='26'/></g></svg>");
 }
 /* far layer: smaller, fainter, slower */
 .sky::before {
